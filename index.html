@@ -1,1082 +1,1400 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
-<title>MODE EARN</title>
-
-<style>
-:root{
-  --primary:#ef4444;
-  --bg:#0b1622;
-  --panel:#071d38;
-  --muted:#829bb7;
-}
-
-*{box-sizing:border-box;margin:0;padding:0}
-
-body{
-  font-family:-apple-system,system-ui,Segoe UI,sans-serif;
-  color:#fff;
-  background:var(--bg);
-  min-height:100vh;
-}
-
-button,input,select,textarea{font:inherit}
-
-.app{
-  max-width:480px;
-  margin:auto;
-  min-height:100vh;
-  padding-bottom:80px;
-}
-
-.topbar{
-  position:sticky;
-  top:0;
-  z-index:20;
-  height:64px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:0 16px;
-  background:rgba(4,20,40,.88);
-  backdrop-filter:blur(12px);
-  border-bottom:1px solid rgba(255,255,255,.08);
-}
-
-.brand{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  font-weight:bold;
-}
-
-.logo{
-  width:34px;
-  height:34px;
-  border-radius:10px;
-  object-fit:cover;
-}
-
-.page{
-  display:none;
-  padding:16px;
-}
-
-.page.active{display:block}
-
-.box{
-  background:rgba(7,29,56,.92);
-  border:1px solid rgba(255,255,255,.08);
-  border-radius:16px;
-  padding:16px;
-  margin-bottom:14px;
-}
-
-.balance{
-  background:linear-gradient(145deg,#0a2f5e,#061a34);
-  border:1px solid rgba(43,127,255,.2);
-}
-
-.label{
-  color:#8da6c1;
-  font-size:10px;
-  text-transform:uppercase;
-  letter-spacing:.4px;
-}
-
-.big{
-  font-size:32px;
-  font-weight:bold;
-  margin:6px 0;
-}
-
-.green{color:#25e58a}
-
-.stats{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:7px;
-  margin-top:14px;
-}
-
-.stat{
-  text-align:center;
-  background:rgba(4,22,43,.7);
-  border:1px solid rgba(255,255,255,.06);
-  border-radius:11px;
-  padding:10px 4px;
-}
-
-.stat small{
-  color:#829bb7;
-  font-size:8px;
-}
-
-.stat b{
-  display:block;
-  font-size:12px;
-  margin-top:5px;
-}
-
-.title{
-  font-size:16px;
-  font-weight:bold;
-  margin:16px 0 10px;
-}
-
-.btn{
-  width:100%;
-  padding:14px;
-  border:0;
-  border-radius:12px;
-  background:var(--primary);
-  color:#fff;
-  font-weight:bold;
-  cursor:pointer;
-}
-
-.start{
-  height:120px;
-  border:1px solid rgba(255,255,255,.2);
-  background:linear-gradient(145deg,#0c3f82,#0759d9);
-}
-
-input,select,textarea{
-  width:100%;
-  height:44px;
-  margin:6px 0 10px;
-  background:#04162c;
-  color:#fff;
-  border:1px solid #244b73;
-  border-radius:10px;
-  padding:0 12px;
-  outline:none;
-}
-
-label{
-  display:block;
-  color:#a9bdd2;
-  font-size:10px;
-  font-weight:bold;
-}
-
-.nav{
-  position:fixed;
-  bottom:0;
-  left:50%;
-  transform:translateX(-50%);
-  width:100%;
-  max-width:480px;
-  height:70px;
-  background:rgba(4,20,40,.98);
-  border-top:1px solid rgba(255,255,255,.08);
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  z-index:80;
-}
-
-.nav button{
-  background:none;
-  border:0;
-  color:#7189a7;
-  font-size:10px;
-  cursor:pointer;
-  padding:8px 0;
-}
-
-.nav button.active{color:var(--primary)}
-
-#welcome{
-  position:fixed;
-  inset:0;
-  z-index:300;
-  overflow-y:auto;
-  background:
-    radial-gradient(circle at 50% 0%,rgba(239,68,68,.12),transparent 35%),
-    #0b1622;
-}
-
-.welcome-inner{
-  width:100%;
-  max-width:480px;
-  margin:auto;
-  padding:28px 18px 42px;
-}
-
-.welcome-logo{
-  width:82px;
-  height:82px;
-  border-radius:22px;
-  object-fit:cover;
-  display:block;
-  margin:8px auto 18px;
-  box-shadow:0 15px 45px rgba(0,0,0,.35);
-}
-
-.welcome-brand{
-  text-align:center;
-  font-size:29px;
-  font-weight:800;
-  letter-spacing:-1px;
-}
-
-.welcome-sub{
-  text-align:center;
-  color:#829bb7;
-  font-size:12px;
-  margin-top:6px;
-}
-
-.welcome-hero{
-  text-align:center;
-  padding:20px 0 22px;
-}
-
-.welcome-hero h1{
-  font-size:27px;
-  line-height:1.15;
-  margin-bottom:12px;
-}
-
-.welcome-hero p{
-  color:#a7bbcf;
-  font-size:13px;
-  line-height:1.7;
-}
-
-.welcome-description{
-  background:linear-gradient(145deg,#0a294b,#071d38);
-  border:1px solid rgba(255,255,255,.09);
-  border-radius:19px;
-  padding:19px;
-  margin-bottom:16px;
-}
-
-.welcome-description h2{
-  font-size:16px;
-  margin-bottom:9px;
-}
-
-.welcome-description p{
-  color:#91a9c0;
-  font-size:11px;
-  line-height:1.7;
-}
-
-.welcome-info{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:9px;
-  margin-bottom:18px;
-}
-
-.w-info{
-  background:#071d38;
-  border:1px solid rgba(255,255,255,.08);
-  border-radius:15px;
-  padding:14px;
-}
-
-.w-info b{
-  display:block;
-  font-size:12px;
-  margin-bottom:6px;
-}
-
-.w-info span{
-  color:#829bb7;
-  font-size:10px;
-  line-height:1.5;
-}
-
-.steps-title{
-  font-size:18px;
-  margin:22px 0 11px;
-}
-
-.welcome-step{
-  display:flex;
-  gap:12px;
-  background:#071d38;
-  border:1px solid rgba(255,255,255,.07);
-  border-radius:15px;
-  padding:14px;
-  margin-bottom:9px;
-}
-
-.step-number{
-  flex:0 0 30px;
-  height:30px;
-  border-radius:9px;
-  background:#0b3c72;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:11px;
-  font-weight:bold;
-}
-
-.welcome-step b{
-  display:block;
-  font-size:12px;
-  margin-bottom:4px;
-}
-
-.welcome-step p{
-  color:#829bb7;
-  font-size:10px;
-  line-height:1.55;
-}
-
-.welcome-bottom{
-  margin-top:24px;
-  background:linear-gradient(145deg,#0c3f82,#0759d9);
-  border-radius:18px;
-  padding:19px;
-  border:1px solid rgba(255,255,255,.16);
-}
-
-.welcome-bottom h3{
-  font-size:16px;
-  margin-bottom:7px;
-}
-
-.welcome-bottom p{
-  color:#c8dcf0;
-  font-size:10px;
-  line-height:1.6;
-  margin-bottom:14px;
-}
-
-.welcome-actions{
-  display:grid;
-  gap:8px;
-}
-
-.welcome-actions .btn{
-  background:#ef4444;
-}
-
-.welcome-login{
-  background:rgba(255,255,255,.08)!important;
-  border:1px solid rgba(255,255,255,.18);
-}
-
-#login{
-  position:fixed;
-  inset:0;
-  z-index:90;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  padding:24px;
-  background:#0b1622;
-}
-
-#login .card{
-  width:100%;
-  max-width:360px;
-  background:rgba(7,29,56,.95);
-  border:1px solid rgba(255,255,255,.1);
-  border-radius:22px;
-  padding:28px;
-}
-
-.login-description{
-  color:#829bb7;
-  font-size:11px;
-  line-height:1.6;
-  text-align:center;
-  margin-top:9px;
-}
-
-#authFlow{
-  position:fixed;
-  inset:0;
-  z-index:95;
-  background:#0b1622;
-  display:none;
-  align-items:flex-start;
-  justify-content:center;
-  padding:18px;
-  overflow-y:auto;
-}
-
-.auth-card{
-  width:100%;
-  max-width:390px;
-  background:rgba(7,29,56,.97);
-  border:1px solid rgba(255,255,255,.1);
-  border-radius:22px;
-  padding:25px;
-  position:relative;
-  overflow:hidden;
-  margin:auto;
-}
-
-.auth-progress{
-  display:flex;
-  gap:5px;
-  margin-bottom:24px;
-}
-
-.auth-progress span{
-  height:4px;
-  flex:1;
-  border-radius:3px;
-  background:#173552;
-}
-
-.auth-progress span.active{
-  background:var(--primary);
-}
-
-.auth-step{
-  display:none;
-  animation:authIn .3s ease;
-}
-
-.auth-step.active{display:block}
-
-@keyframes authIn{
-  from{opacity:0;transform:translateX(12px)}
-  to{opacity:1;transform:translateX(0)}
-}
-
-.auth-processing{
-  position:absolute;
-  inset:0;
-  background:rgba(7,29,56,.985);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  flex-direction:column;
-  z-index:5;
-  text-align:center;
-  padding:30px;
-}
-
-.auth-processing.show{display:flex}
-
-.spinner{
-  width:32px;
-  height:32px;
-  border:3px solid #244b73;
-  border-top-color:var(--primary);
-  border-radius:50%;
-  animation:spin .7s linear infinite;
-  margin-bottom:14px;
-}
-
-@keyframes spin{
-  to{transform:rotate(360deg)}
-}
-
-.processing-bar{
-  width:190px;
-  height:4px;
-  background:#173552;
-  border-radius:5px;
-  overflow:hidden;
-  margin-top:15px;
-}
-
-.processing-bar div{
-  width:45%;
-  height:100%;
-  background:var(--primary);
-  animation:processBar 1.6s ease-in-out infinite;
-}
-
-@keyframes processBar{
-  0%{transform:translateX(-120%)}
-  100%{transform:translateX(450%)}
-}
-
-.auth-back{
-  background:none;
-  border:0;
-  color:#829bb7;
-  font-size:11px;
-  padding:10px 0 3px;
-  cursor:pointer;
-}
-
-.auth-note{
-  background:#061a31;
-  border:1px solid #1b4165;
-  border-radius:11px;
-  padding:12px;
-  color:#829bb7;
-  font-size:10px;
-  line-height:1.55;
-  margin-bottom:14px;
-}
-
-.country-search{
-  margin-bottom:7px;
-}
-
-.country-list{
-  max-height:220px;
-  overflow-y:auto;
-  border:1px solid #244b73;
-  border-radius:10px;
-  background:#04162c;
-}
-
-.country-option{
-  padding:13px;
-  border-bottom:1px solid rgba(255,255,255,.05);
-  font-size:12px;
-  cursor:pointer;
-}
-
-.country-option:last-child{
-  border-bottom:0;
-}
-
-.country-option.selected{
-  background:rgba(239,68,68,.16);
-}
-
-.summary-row{
-  display:flex;
-  justify-content:space-between;
-  gap:10px;
-  padding:12px 0;
-  border-bottom:1px solid #17334f;
-  font-size:11px;
-}
-
-.summary-row:last-child{border-bottom:0}
-
-.summary-row span{color:#829bb7}
-
-.summary-row b{
-  text-align:right;
-  word-break:break-word;
-}
-
-.checkline{
-  display:flex;
-  align-items:center;
-  gap:9px;
-  background:#061a31;
-  border:1px solid #1b4165;
-  border-radius:11px;
-  padding:12px;
-  margin:14px 0;
-  font-size:10px;
-  color:#a9bdd2;
-}
-
-.checkline input{
-  width:16px;
-  height:16px;
-  margin:0;
-}
-
-.account-welcome{
-  background:linear-gradient(145deg,#071d38,#092c51);
-  border:1px solid rgba(43,127,255,.22);
-  border-radius:17px;
-  padding:16px;
-  margin-bottom:14px;
-}
-
-.account-welcome small{
-  color:#829bb7;
-  font-size:9px;
-}
-
-.account-welcome h2{
-  font-size:20px;
-  margin:5px 0;
-}
-
-.account-welcome p{
-  color:#91a9c0;
-  font-size:10px;
-  line-height:1.55;
-}
-
-.front-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:9px;
-  margin-bottom:15px;
-}
-
-.front-info{
-  background:#071d38;
-  border:1px solid rgba(255,255,255,.07);
-  border-radius:14px;
-  padding:13px;
-}
-
-.front-info span{
-  display:block;
-  color:#829bb7;
-  font-size:9px;
-  margin-bottom:5px;
-}
-
-.front-info b{
-  font-size:13px;
-}
-
-.front-section{
-  background:#071d38;
-  border:1px solid rgba(255,255,255,.08);
-  border-radius:16px;
-  padding:16px;
-  margin-bottom:14px;
-}
-
-.front-section h3{
-  font-size:14px;
-  margin-bottom:7px;
-}
-
-.front-section>p{
-  color:#829bb7;
-  font-size:10px;
-  line-height:1.6;
-}
-
-.front-guide{
-  display:flex;
-  gap:10px;
-  padding:12px 0;
-  border-bottom:1px solid #17334f;
-}
-
-.front-guide:last-child{border-bottom:0}
-
-.front-guide-number{
-  width:27px;
-  height:27px;
-  flex:0 0 27px;
-  border-radius:8px;
-  background:#0b3c72;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:10px;
-  font-weight:bold;
-}
-
-.front-guide b{
-  display:block;
-  font-size:11px;
-  margin-bottom:4px;
-}
-
-.front-guide span{
-  color:#829bb7;
-  font-size:9px;
-  line-height:1.5;
-}
-
-.blue-bottom{
-  background:linear-gradient(145deg,#0c3f82,#0759d9);
-  border:1px solid rgba(255,255,255,.14);
-  border-radius:18px;
-  padding:18px;
-  margin-top:8px;
-}
-
-.blue-bottom h3{
-  font-size:15px;
-  margin-bottom:6px;
-}
-
-.blue-bottom p{
-  color:#c7daf0;
-  font-size:10px;
-  line-height:1.6;
-}
-
-.presets{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:7px;
-  margin:8px 0;
-}
-
-.preset{
-  padding:10px 3px;
-  border-radius:9px;
-  background:#061a33;
-  color:#fff;
-  border:1px solid #24486c;
-  cursor:pointer;
-  font-weight:bold;
-}
-
-.preset.active{
-  background:var(--primary);
-  border-color:#fff3;
-}
-
-.card-visual{
-  background:linear-gradient(135deg,#182c43,#06162a);
-  border:1px solid rgba(255,255,255,.14);
-  border-radius:18px;
-  padding:20px;
-  margin-bottom:14px;
-  min-height:185px;
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-  box-shadow:0 14px 35px rgba(0,0,0,.25);
-}
-
-.card-chip{
-  width:36px;
-  height:27px;
-  border-radius:6px;
-  background:linear-gradient(135deg,#aaa,#555);
-}
-
-.card-number{
-  font-size:20px;
-  letter-spacing:2px;
-}
-
-.card-meta{
-  display:flex;
-  justify-content:space-between;
-  gap:15px;
-  font-size:10px;
-}
-
-.card-meta small{
-  display:block;
-  color:#7189a5;
-  font-size:7px;
-  margin-bottom:3px;
-}
-
-.card-meta>div{
-  max-width:50%;
-  word-break:break-word;
-}
-
-.saved-card{
-  border:1px solid rgba(37,229,138,.2);
-  background:rgba(5,39,34,.5);
-  border-radius:16px;
-  padding:14px;
-}
-
-.card-actions{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:8px;
-  margin-top:10px;
-}
-
-.btn-secondary{
-  width:100%;
-  padding:12px;
-  border-radius:11px;
-  background:#102a44;
-  color:#fff;
-  border:1px solid #244b73;
-  font-weight:bold;
-  cursor:pointer;
-}
-
-.withdraw-step{display:none}
-.withdraw-step.active{display:block}
-
-.withdraw-method{
-  border:1px solid #244b73;
-  border-radius:14px;
-  padding:14px;
-  background:#061a31;
-  cursor:pointer;
-  margin-bottom:10px;
-}
-
-.withdraw-method.selected{
-  border-color:var(--primary);
-  background:rgba(239,68,68,.08);
-}
-
-.withdraw-method-head{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-}
-
-.withdraw-card-mini{
-  font-size:15px;
-  letter-spacing:1px;
-  font-weight:bold;
-  margin:8px 0;
-}
-
-.withdraw-check{
-  width:18px;
-  height:18px;
-  border:1px solid #55728e;
-  border-radius:50%;
-}
-
-.withdraw-method.selected .withdraw-check{
-  background:var(--primary);
-  border-color:var(--primary);
-  box-shadow:inset 0 0 0 4px #061a31;
-}
-
-.account-section{margin-bottom:14px}
-
-.account-row{
-  display:flex;
-  justify-content:space-between;
-  gap:15px;
-  padding:12px 0;
-  border-bottom:1px solid #17334f;
-  font-size:11px;
-}
-
-.account-row:last-child{border-bottom:0}
-
-.account-row span{color:#829bb7}
-
-.account-row b{
-  text-align:right;
-  max-width:60%;
-  word-break:break-word;
-}
-
-.account-status{
-  display:inline-flex;
-  padding:4px 8px;
-  border-radius:20px;
-  background:rgba(37,229,138,.1);
-  color:#25e58a;
-  font-size:9px;
-}
-
-.danger-btn{
-  background:#3b1418;
-  border:1px solid rgba(239,68,68,.3);
-  color:#ff8d95;
-}
-
-#session{
-  position:fixed;
-  inset:0;
-  background:#000;
-  display:none;
-  z-index:100;
-}
-
-#session.active{display:block}
-
-#notif{
-  position:fixed;
-  top:16px;
-  left:50%;
-  transform:translateX(-50%) translateY(-80px);
-  z-index:200;
-  background:rgba(7,29,56,.97);
-  border:1px solid var(--primary);
-  border-radius:14px;
-  padding:12px 16px;
-  display:flex;
-  align-items:center;
-  gap:10px;
-  box-shadow:0 10px 30px rgba(0,0,0,.4);
-  transition:transform .35s ease;
-  max-width:90%;
-}
-
-#notif.show{
-  transform:translateX(-50%) translateY(0);
-}
-
-#notif img{
-  width:28px;
-  height:28px;
-  border-radius:8px;
-  object-fit:cover;
-}
-
-#confirm{
-  position:fixed;
-  inset:0;
-  z-index:150;
-  background:rgba(0,0,0,.7);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  padding:24px;
-}
-
-#confirm.show{display:flex}
-
-.confirm-card{
-  width:100%;
-  max-width:320px;
-  background:#1a0e10;
-  border:1px solid rgba(239,68,68,.3);
-  border-radius:20px;
-  padding:24px;
-  text-align:center;
-}
-
-.payment-link-box{
-  background:#061a31;
-  border:1px solid #1b4165;
-  border-radius:12px;
-  padding:12px;
-  margin-bottom:14px;
-}
-
-.payment-link-box p{
-  color:#829bb7;
-  font-size:10px;
-  line-height:1.55;
-}
-
-.payment-error{
-  display:none;
-  color:#ff8d95;
-  background:rgba(239,68,68,.08);
-  border:1px solid rgba(239,68,68,.25);
-  border-radius:10px;
-  padding:10px;
-  font-size:10px;
-  line-height:1.5;
-  margin-bottom:10px;
-}
-
-.payment-error.show{
-  display:block;
-}
-
-.card-link-info{
-  margin-top:12px;
-  border-top:1px solid #17334f;
-  padding-top:10px;
-}
-
-.card-link-info .summary-row{
-  padding:8px 0;
-  font-size:10px;
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>MODE EARN</title>
+  <style>
+    :root {
+      --primary: #ef4444;
+      --bg: #0b1622;
+      --panel: #071d38;
+      --muted: #829bb7;
+      --card: rgba(7, 29, 56, 0.92);
+      --line: rgba(255,255,255,0.08);
+      --success: #25e58a;
+      --danger: #ff8d95;
+      --blue: #0b3c72;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      margin: 0;
+      font-family: -apple-system, system-ui, Segoe UI, sans-serif;
+      background: var(--bg);
+      color: #fff;
+      min-height: 100vh;
+    }
+
+    body { padding-bottom: 92px; }
+    button, input, select, textarea { font: inherit; }
+
+    .app {
+      max-width: 480px;
+      margin: 0 auto;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    .page {
+      display: none;
+      padding: 16px;
+    }
+    .page.active { display: block; }
+
+    .box {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 14px;
+    }
+
+    .label {
+      color: var(--muted);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+
+    .big {
+      font-size: 32px;
+      font-weight: bold;
+      margin: 6px 0;
+    }
+
+    .green { color: var(--success); }
+
+    .title {
+      font-size: 16px;
+      font-weight: bold;
+      margin: 16px 0 10px;
+    }
+
+    .btn, .btn-secondary {
+      width: 100%;
+      padding: 14px;
+      border: 0;
+      border-radius: 12px;
+      background: var(--primary);
+      color: #fff;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .btn-secondary {
+      background: #102a44;
+      border: 1px solid #244b73;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      height: 44px;
+      margin: 6px 0 10px;
+      background: #04162c;
+      color: #fff;
+      border: 1px solid #244b73;
+      border-radius: 10px;
+      padding: 0 12px;
+      outline: none;
+    }
+
+    label {
+      display: block;
+      color: #a9bdd2;
+      font-size: 10px;
+      font-weight: bold;
+    }
+
+    .nav {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 480px;
+      height: 70px;
+      background: rgba(4,20,40,.98);
+      border-top: 1px solid rgba(255,255,255,.08);
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      z-index: 80;
+    }
+
+    .nav button {
+      background: none;
+      border: 0;
+      color: #7189a7;
+      font-size: 10px;
+      cursor: pointer;
+      padding: 8px 0;
+    }
+
+    .nav button.active { color: var(--primary); }
+
+    #welcome {
+      position: fixed;
+      inset: 0;
+      z-index: 300;
+      overflow-y: auto;
+      background: radial-gradient(circle at 50% 0%, rgba(239,68,68,.12), transparent 35%), #0b1622;
+    }
+
+    .welcome-inner {
+      width: 100%;
+      max-width: 480px;
+      margin: auto;
+      padding: 28px 18px 42px;
+    }
+
+    .welcome-logo {
+      width: 82px;
+      height: 82px;
+      border-radius: 22px;
+      object-fit: cover;
+      display: block;
+      margin: 8px auto 18px;
+      box-shadow: 0 15px 45px rgba(0,0,0,.35);
+    }
+
+    .welcome-brand {
+      text-align: center;
+      font-size: 29px;
+      font-weight: 800;
+      letter-spacing: -1px;
+    }
+
+    .welcome-sub {
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 6px;
+    }
+
+    .welcome-hero {
+      text-align: center;
+      padding: 20px 0 22px;
+    }
+
+    .welcome-hero h1 {
+      font-size: 27px;
+      line-height: 1.15;
+      margin-bottom: 12px;
+    }
+
+    .welcome-hero p {
+      color: #a7bbcf;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .welcome-description {
+      background: linear-gradient(145deg, #0a294b, #071d38);
+      border: 1px solid rgba(255,255,255,.09);
+      border-radius: 19px;
+      padding: 19px;
+      margin-bottom: 16px;
+    }
+
+    .welcome-description h2 {
+      font-size: 16px;
+      margin-bottom: 9px;
+    }
+
+    .welcome-description p {
+      color: #91a9c0;
+      font-size: 11px;
+      line-height: 1.7;
+    }
+
+    .welcome-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 9px;
+      margin-bottom: 18px;
+    }
+
+    .w-info {
+      background: #071d38;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 15px;
+      padding: 14px;
+    }
+
+    .w-info b {
+      display: block;
+      font-size: 12px;
+      margin-bottom: 6px;
+    }
+
+    .w-info span {
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.5;
+    }
+
+    .steps-title {
+      font-size: 18px;
+      margin: 22px 0 11px;
+    }
+
+    .welcome-step {
+      display: flex;
+      gap: 12px;
+      background: #071d38;
+      border: 1px solid rgba(255,255,255,.07);
+      border-radius: 15px;
+      padding: 14px;
+      margin-bottom: 9px;
+    }
+
+    .step-number {
+      flex: 0 0 30px;
+      height: 30px;
+      border-radius: 9px;
+      background: var(--blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: bold;
+    }
+
+    .welcome-step b {
+      display: block;
+      font-size: 12px;
+      margin-bottom: 4px;
+    }
+
+    .welcome-step p {
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.55;
+    }
+
+    .welcome-bottom {
+      margin-top: 24px;
+      background: linear-gradient(145deg, #0c3f82, #0759d9);
+      border-radius: 18px;
+      padding: 19px;
+      border: 1px solid rgba(255,255,255,.16);
+    }
+
+    .welcome-bottom h3 {
+      font-size: 16px;
+      margin-bottom: 7px;
+    }
+
+    .welcome-bottom p {
+      color: #c8dcf0;
+      font-size: 10px;
+      line-height: 1.6;
+      margin-bottom: 14px;
+    }
+
+    .welcome-actions {
+      display: grid;
+      gap: 8px;
+    }
+
+    .welcome-login {
+      background: rgba(255,255,255,.08) !important;
+      border: 1px solid rgba(255,255,255,.18);
+    }
+
+    #login {
+      position: fixed;
+      inset: 0;
+      z-index: 90;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: #0b1622;
+    }
+
+    #login .card {
+      width: 100%;
+      max-width: 360px;
+      background: rgba(7,29,56,.95);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 22px;
+      padding: 28px;
+    }
+
+    .login-description {
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.6;
+      text-align: center;
+      margin-top: 9px;
+    }
+
+    #authFlow {
+      position: fixed;
+      inset: 0;
+      z-index: 95;
+      background: #0b1622;
+      display: none;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 18px;
+      overflow-y: auto;
+    }
+
+    .auth-card {
+      width: 100%;
+      max-width: 390px;
+      background: rgba(7,29,56,.97);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 22px;
+      padding: 25px;
+      position: relative;
+      overflow: hidden;
+      margin: auto;
+    }
+
+    .auth-progress {
+      display: flex;
+      gap: 5px;
+      margin-bottom: 24px;
+    }
+
+    .auth-progress span {
+      height: 4px;
+      flex: 1;
+      border-radius: 3px;
+      background: #173552;
+    }
+
+    .auth-progress span.active {
+      background: var(--primary);
+    }
+
+    .auth-step {
+      display: none;
+      animation: authIn .3s ease;
+    }
+
+    .auth-step.active { display: block; }
+
+    @keyframes authIn {
+      from { opacity: 0; transform: translateX(12px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .auth-processing {
+      position: absolute;
+      inset: 0;
+      background: rgba(7,29,56,.985);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      z-index: 5;
+      text-align: center;
+      padding: 30px;
+    }
+
+    .auth-processing.show { display: flex; }
+
+    .spinner {
+      width: 32px;
+      height: 32px;
+      border: 3px solid #244b73;
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+      margin-bottom: 14px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .processing-bar {
+      width: 190px;
+      height: 4px;
+      background: #173552;
+      border-radius: 5px;
+      overflow: hidden;
+      margin-top: 15px;
+    }
+
+    .processing-bar div {
+      width: 45%;
+      height: 100%;
+      background: var(--primary);
+      animation: processBar 1.6s ease-in-out infinite;
+    }
+
+    @keyframes processBar {
+      0% { transform: translateX(-120%); }
+      100% { transform: translateX(450%); }
+    }
+
+    .auth-back {
+      background: none;
+      border: 0;
+      color: var(--muted);
+      font-size: 11px;
+      padding: 10px 0 3px;
+      cursor: pointer;
+    }
+
+    .country-search { margin-bottom: 7px; }
+
+    .country-list {
+      max-height: 220px;
+      overflow-y: auto;
+      border: 1px solid #244b73;
+      border-radius: 10px;
+      background: #04162c;
+    }
+
+    .country-option {
+      padding: 13px;
+      border-bottom: 1px solid rgba(255,255,255,.05);
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .country-option:last-child { border-bottom: 0; }
+    .country-option.selected { background: rgba(239,68,68,.16); }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 12px 0;
+      border-bottom: 1px solid #17334f;
+      font-size: 11px;
+    }
+
+    .summary-row:last-child { border-bottom: 0; }
+    .summary-row span { color: var(--muted); }
+    .summary-row b {
+      text-align: right;
+      word-break: break-word;
+    }
+
+    .checkline {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      background: #061a31;
+      border: 1px solid #1b4165;
+      border-radius: 11px;
+      padding: 12px;
+      margin: 14px 0;
+      font-size: 10px;
+      color: #a9bdd2;
+    }
+
+    .checkline input {
+      width: 16px;
+      height: 16px;
+      margin: 0;
+    }
+
+    .account-welcome {
+      background: linear-gradient(145deg, #071d38, #092c51);
+      border: 1px solid rgba(43,127,255,.22);
+      border-radius: 17px;
+      padding: 16px;
+      margin-bottom: 14px;
+    }
+
+    .account-welcome small {
+      color: var(--muted);
+      font-size: 9px;
+    }
+
+    .account-welcome h2 {
+      font-size: 20px;
+      margin: 5px 0;
+    }
+
+    .account-welcome p {
+      color: #91a9c0;
+      font-size: 10px;
+      line-height: 1.55;
+    }
+
+    .front-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 9px;
+      margin-bottom: 15px;
+    }
+
+    .front-info {
+      background: #071d38;
+      border: 1px solid rgba(255,255,255,.07);
+      border-radius: 14px;
+      padding: 13px;
+    }
+
+    .front-info span {
+      display: block;
+      color: var(--muted);
+      font-size: 9px;
+      margin-bottom: 5px;
+    }
+
+    .front-info b { font-size: 13px; }
+
+    .front-section {
+      background: #071d38;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 14px;
+    }
+
+    .front-section h3 {
+      font-size: 14px;
+      margin-bottom: 7px;
+    }
+
+    .front-section > p {
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.6;
+    }
+
+    .front-guide {
+      display: flex;
+      gap: 10px;
+      padding: 12px 0;
+      border-bottom: 1px solid #17334f;
+    }
+
+    .front-guide:last-child { border-bottom: 0; }
+
+    .front-guide-number {
+      width: 27px;
+      height: 27px;
+      flex: 0 0 27px;
+      border-radius: 8px;
+      background: var(--blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: bold;
+    }
+
+    .front-guide b {
+      display: block;
+      font-size: 11px;
+      margin-bottom: 4px;
+    }
+
+    .front-guide span {
+      color: var(--muted);
+      font-size: 9px;
+      line-height: 1.5;
+    }
+
+    .blue-bottom {
+      background: linear-gradient(145deg, #0c3f82, #0759d9);
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 18px;
+      padding: 18px;
+      margin-top: 8px;
+    }
+
+    .blue-bottom h3 {
+      font-size: 15px;
+      margin-bottom: 6px;
+    }
+
+    .blue-bottom p {
+      color: #c7daf0;
+      font-size: 10px;
+      line-height: 1.6;
+    }
+
+    .presets {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 7px;
+      margin: 8px 0;
+    }
+
+    .preset {
+      padding: 10px 3px;
+      border-radius: 9px;
+      background: #061a33;
+      color: #fff;
+      border: 1px solid #24486c;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .preset.active {
+      background: var(--primary);
+      border-color: rgba(255,255,255,.3);
+    }
+
+    .card-visual {
+      background: linear-gradient(135deg, #182c43, #06162a);
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 18px;
+      padding: 20px;
+      margin-bottom: 14px;
+      min-height: 185px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 14px 35px rgba(0,0,0,.25);
+    }
+
+    .card-chip {
+      width: 36px;
+      height: 27px;
+      border-radius: 6px;
+      background: linear-gradient(135deg, #aaa, #555);
+    }
+
+    .card-number {
+      font-size: 20px;
+      letter-spacing: 2px;
+    }
+
+    .card-meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      font-size: 10px;
+    }
+
+    .card-meta small {
+      display: block;
+      color: #7189a5;
+      font-size: 7px;
+      margin-bottom: 3px;
+    }
+
+    .card-meta > div {
+      max-width: 50%;
+      word-break: break-word;
+    }
+
+    .saved-card {
+      border: 1px solid rgba(37,229,138,.2);
+      background: rgba(5,39,34,.5);
+      border-radius: 16px;
+      padding: 14px;
+    }
+
+    .card-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .withdraw-step { display: none; }
+    .withdraw-step.active { display: block; }
+
+    .withdraw-method {
+      border: 1px solid #244b73;
+      border-radius: 14px;
+      padding: 14px;
+      background: #061a31;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+
+    .withdraw-method.selected {
+      border-color: var(--primary);
+      background: rgba(239,68,68,.08);
+    }
+
+    .withdraw-method-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .withdraw-card-mini {
+      font-size: 15px;
+      letter-spacing: 1px;
+      font-weight: bold;
+      margin: 8px 0;
+    }
+
+    .withdraw-check {
+      width: 18px;
+      height: 18px;
+      border: 1px solid #55728e;
+      border-radius: 50%;
+    }
+
+    .withdraw-method.selected .withdraw-check {
+      background: var(--primary);
+      border-color: var(--primary);
+      box-shadow: inset 0 0 0 4px #061a31;
+    }
+
+    .account-section { margin-bottom: 14px; }
+
+    .account-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 12px 0;
+      border-bottom: 1px solid #17334f;
+      font-size: 11px;
+    }
+
+    .account-row:last-child { border-bottom: 0; }
+    .account-row span { color: var(--muted); }
+    .account-row b {
+      text-align: right;
+      max-width: 60%;
+      word-break: break-word;
+    }
+
+    .account-status {
+      display: inline-flex;
+      padding: 4px 8px;
+      border-radius: 20px;
+      background: rgba(37,229,138,.1);
+      color: var(--success);
+      font-size: 9px;
+    }
+
+    .danger-btn {
+      background: #3b1418;
+      border: 1px solid rgba(239,68,68,.3);
+      color: var(--danger);
+    }
+
+    #session {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      display: none;
+      z-index: 100;
+    }
+
+    #session.active { display: block; }
+
+    #notif {
+      position: fixed;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-80px);
+      z-index: 200;
+      background: rgba(7,29,56,.97);
+      border: 1px solid var(--primary);
+      border-radius: 14px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.4);
+      transition: transform .35s ease;
+      max-width: 90%;
+    }
+
+    #notif.show { transform: translateX(-50%) translateY(0); }
+
+    #notif img {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      object-fit: cover;
+    }
+
+    #confirm {
+      position: fixed;
+      inset: 0;
+      z-index: 150;
+      background: rgba(0,0,0,.7);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    #confirm.show { display: flex; }
+
+    .confirm-card {
+      width: 100%;
+      max-width: 320px;
+      background: #1a0e10;
+      border: 1px solid rgba(239,68,68,.3);
+      border-radius: 20px;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .payment-link-box {
+      background: #061a31;
+      border: 1px solid #1b4165;
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 14px;
+    }
+
+    .payment-link-box p {
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.55;
+    }
+
+    .payment-error {
+      display: none;
+      color: var(--danger);
+      background: rgba(239,68,68,.08);
+      border: 1px solid rgba(239,68,68,.25);
+      border-radius: 10px;
+      padding: 10px;
+      font-size: 10px;
+      line-height: 1.5;
+      margin-bottom: 10px;
+    }
+
+    .payment-error.show { display: block; }
+
+    .card-link-info {
+      margin-top: 12px;
+      border-top: 1px solid #17334f;
+      padding-top: 10px;
+    }
+
+    .card-link-info .summary-row {
+      padding: 8px 0;
+      font-size: 10px;
+    }
+  </style>
 </head>
-
 <body>
+  <div class="app">
+    <div id="welcome">
+      <div class="welcome-inner">
+        <img class="welcome-logo" src="https://media.base44.com/images/public/6a966af9dd4ce36f10e59f6f/468a6ee17_generated_image.png" alt="logo">
+        <div class="welcome-brand">MODE EARN</div>
+        <div class="welcome-sub">Watch • Earn • Withdraw</div>
 
-<div id="welcome">
-  <div class="welcome-inner">
+        <div class="welcome-hero">
+          <h1>Bienvenue sur MODE EARN.</h1>
+          <p>
+            Une plateforme conçue pour vous permettre de découvrir des contenus, suivre votre activité et gérer votre espace personnel depuis une seule interface.
+          </p>
+        </div>
 
-    <img class="welcome-logo"
-      src="https://media.base44.com/images/public/6a966af9dd4ce36f10e59f6f/468a6ee17_generated_image.png">
+        <div class="welcome-description">
+          <h2>Découvrez votre nouvel espace</h2>
+          <p>
+            Créez votre compte, configurez votre profil et découvrez progressivement les différentes fonctions disponibles sur MODE EARN.
+            Votre espace personnel vous permet de consulter vos informations, suivre votre solde, gérer votre portefeuille et consulter votre historique.
+          </p>
+        </div>
 
-    <div class="welcome-brand">MODE EARN</div>
-    <div class="welcome-sub">Watch • Earn • Withdraw</div>
+        <div class="welcome-info">
+          <div class="w-info"><b>Votre compte</b><span>Un espace personnel avec vos informations et votre identité.</span></div>
+          <div class="w-info"><b>Votre solde</b><span>Consultez votre valeur disponible directement depuis l'accueil.</span></div>
+          <div class="w-info"><b>Votre activité</b><span>Suivez votre temps, vos sessions et les opérations enregistrées.</span></div>
+          <div class="w-info"><b>Votre portefeuille</b><span>Gérez les informations nécessaires aux retraits.</span></div>
+        </div>
 
-    <div class="welcome-hero">
-      <h1>Bienvenue sur MODE EARN.</h1>
-      <p>
-        Une plateforme conçue pour vous permettre de découvrir des contenus,
-        suivre votre activité et gérer votre espace personnel depuis une seule
-        interface.
-      </p>
-    </div>
+        <div class="steps-title">Comment commencer ?</div>
 
-    <div class="welcome-description">
-      <h2>Découvrez votre nouvel espace</h2>
-      <p>
-        Créez votre compte, configurez votre profil et découvrez progressivement
-        les différentes fonctions disponibles sur MODE EARN. Votre espace
-        personnel vous permet de consulter vos informations, suivre votre
-        solde, gérer votre portefeuille et consulter votre historique.
-      </p>
-    </div>
+        <div class="welcome-step">
+          <div class="step-number">01</div>
+          <div>
+            <b>Créer votre compte</b>
+            <p>Commencez par sélectionner « Créer mon compte » et ouvrez votre espace personnel.</p>
+          </div>
+        </div>
 
-    <div class="welcome-info">
-      <div class="w-info">
-        <b>Votre compte</b>
-        <span>Un espace personnel avec vos informations et votre identité.</span>
-      </div>
+        <div class="welcome-step">
+          <div class="step-number">02</div>
+          <div>
+            <b>Configurer votre profil</b>
+            <p>Complétez les informations nécessaires à votre sécurité et à votre activité.</p>
+          </div>
+        </div>
 
-      <div class="w-info">
-        <b>Votre solde</b>
-        <span>Consultez votre valeur disponible directement depuis l'accueil.</span>
-      </div>
+        <div class="welcome-step">
+          <div class="step-number">03</div>
+          <div>
+            <b>Suivre et retirer</b>
+            <p>Surveillez votre solde, lancez des retraits et gérez votre portefeuille.</p>
+          </div>
+        </div>
 
-      <div class="w-info">
-        <b>Votre activité</b>
-        <span>Suivez votre temps, vos sessions et les opérations enregistrées.</span>
-      </div>
-
-      <div class="w-info">
-        <b>Votre portefeuille</b>
-        <span>Gérez les informations nécessaires aux retraits.</span>
-      </div>
-    </div>
-
-    <div class="steps-title">Comment commencer ?</div>
-
-    <div class="welcome-step">
-      <div class="step-number">01</div>
-      <div>
-        <b>Créer votre compte</b>
-        <p>Commencez par sélectionner « Créer mon compte » et ouvrez votre espace personnel.</p>
-      </div>
-    </div>
-
-    <div class="welcome-step">
-      <div class="step-number">02</div>
-      <div>
-        <b>Configurer votre profil</b>
-        <p>Renseignez les informations nécessaires pour personnaliser votre compte.</p>
+        <div class="welcome-bottom">
+          <h3>Votre espace commence ici</h3>
+          <p>Accédez à votre tableau de bord, suivez votre activité et gérez vos transactions en toute simplicité.</p>
+          <div class="welcome-actions">
+            <button class="btn" data-open-login="create">Créer mon compte</button>
+            <button class="btn welcome-login" data-open-login="login">J'ai déjà un compte</button>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="welcome-step">
-      <div class="step-number">03</div>
-      <div>
-        <b>Découvrir votre espace</b>
-        <p>Consultez votre solde, vos activités et les options disponibles.</p>
+    <div id="login" style="display:none;">
+      <div class="card">
+        <div class="welcome-brand" style="font-size:24px;">MODE EARN</div>
+        <div class="login-description">Accédez à votre espace personnel pour suivre vos gains et gérer votre portefeuille.</div>
+
+        <div style="margin-top:18px;">
+          <label>Email</label>
+          <input type="email" value="user@modeearn.com" />
+
+          <label>Mot de passe</label>
+          <input type="password" value="password123" />
+
+          <button class="btn" id="submitLogin">Se connecter</button>
+          <button class="btn-secondary" id="goCreate" style="margin-top:8px;">Créer un compte</button>
+        </div>
       </div>
     </div>
 
-    <div class="welcome-bottom">
-      <h3>Prêt à commencer ?</h3>
-      <p>Créez un compte ou connectez-vous pour accéder à votre espace MODE EARN.</p>
-      <div class="welcome-actions">
-        <button class="btn">Créer mon compte</button>
-        <button class="btn welcome-login">Se connecter</button>
+    <div id="authFlow">
+      <div class="auth-card">
+        <div class="auth-progress">
+          <span class="active"></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+
+        <div class="auth-processing" id="authProcessing">
+          <div class="spinner"></div>
+          <div>Vérification de votre profil...</div>
+          <div class="processing-bar"><div></div></div>
+        </div>
+
+        <div class="auth-step active" data-step="1">
+          <button class="auth-back" data-back-to-login>← Retour</button>
+          <h3 style="margin:16px 0 10px; font-size:20px;">Créer votre compte</h3>
+          <div class="auth-note">
+            Complétez les informations ci-dessous pour finaliser l'ouverture de votre espace MODE EARN.
+          </div>
+
+          <label>Pays</label>
+          <input type="text" class="country-search" placeholder="Rechercher un pays" id="countrySearch">
+          <div class="country-list" id="countryList"></div>
+
+          <div style="margin-top:18px;">
+            <label>Nom complet</label>
+            <input type="text" value="Jean Dupont" />
+            <label>Email</label>
+            <input type="email" value="jean.dupont@email.com" />
+            <label>Numéro de téléphone</label>
+            <input type="tel" value="+33 6 12 34 56 78" />
+          </div>
+
+          <button class="btn" data-next-step>Continuer</button>
+        </div>
+
+        <div class="auth-step" data-step="2">
+          <button class="auth-back" data-prev-step>← Précédent</button>
+          <h3 style="margin:16px 0 10px; font-size:20px;">Sécuriser votre compte</h3>
+
+          <label>Mot de passe</label>
+          <input type="password" value="Password123!" />
+          <label>Confirmer le mot de passe</label>
+          <input type="password" value="Password123!" />
+          <label>Code de vérification</label>
+          <input type="text" value="8542" />
+
+          <div class="checkline">
+            <input type="checkbox" checked>
+            <span>J'accepte les conditions d'utilisation et la politique de confidentialité.</span>
+          </div>
+
+          <button class="btn" data-next-step>Valider</button>
+        </div>
+
+        <div class="auth-step" data-step="3">
+          <button class="auth-back" data-prev-step>← Précédent</button>
+          <h3 style="margin:16px 0 10px; font-size:20px;">Récapitulatif</h3>
+
+          <div class="summary-row"><span>Pays</span><b>France</b></div>
+          <div class="summary-row"><span>Nom</span><b>Jean Dupont</b></div>
+          <div class="summary-row"><span>Email</span><b>jean.dupont@email.com</b></div>
+          <div class="summary-row"><span>Téléphone</span><b>+33 6 12 34 56 78</b></div>
+
+          <button class="btn" data-next-step style="margin-top:16px;">Confirmer</button>
+        </div>
+
+        <div class="auth-step" data-step="4">
+          <h3 style="margin:16px 0 10px; font-size:20px;">Compte créé</h3>
+          <div class="auth-note">
+            Votre espace MODE EARN est prêt. Vous pouvez maintenant accéder à votre tableau de bord.
+          </div>
+          <button class="btn" id="finishAuth">Accéder à mon espace</button>
+        </div>
       </div>
     </div>
 
+    <div class="page active" id="home">
+      <div class="box balance">
+        <div class="label">Solde disponible</div>
+        <div class="big">1 428,40 €</div>
+        <div class="green">+ 8,2 % ce mois</div>
+      </div>
+
+      <div class="stats">
+        <div class="stat"><small>Sessions</small><b>42</b></div>
+        <div class="stat"><small>Gains</small><b>548 €</b></div>
+        <div class="stat"><small>Retraits</small><b>320 €</b></div>
+      </div>
+
+      <div class="title">À l'affiche</div>
+      <div class="box">
+        <div class="label">Nouveau</div>
+        <div style="font-size: 18px; font-weight: bold; margin: 8px 0;">Pitch marketing • Arène digitale</div>
+        <p style="color:#91a9c0; font-size:11px; line-height:1.7;">Regardez un contenu sponsorisé et gagnez une récompense immédiate.</p>
+        <button class="btn" style="margin-top:14px;">Voir le contenu</button>
+      </div>
+    </div>
+
+    <div class="page" id="wallet">
+      <div class="title">Portefeuille</div>
+
+      <div class="card-visual">
+        <div class="card-chip"></div>
+        <div class="card-number">•••• 2847</div>
+        <div class="card-meta">
+          <div><small>Propriétaire</small><b>Jean Dupont</b></div>
+          <div><small>Type</small><b>Visa</b></div>
+        </div>
+      </div>
+
+      <div class="saved-card">
+        <div class="label">Carte enregistrée</div>
+        <div class="big" style="font-size:24px;">•••• 2847</div>
+        <div class="card-actions">
+          <button class="btn-secondary">Modifier</button>
+          <button class="btn-secondary">Ajouter</button>
+        </div>
+      </div>
+
+      <div class="front-section" style="margin-top:14px;">
+        <h3>État du compte</h3>
+        <div class="summary-row"><span>Solde</span><b>1 428,40 €</b></div>
+        <div class="summary-row"><span>Flux mensuel</span><b>+ 548 €</b></div>
+        <div class="summary-row"><span>Retrait process</span><b>320 €</b></div>
+      </div>
+    </div>
+
+    <div class="page" id="withdraw">
+      <div class="title">Retrait</div>
+
+      <div class="withdraw-step active">
+        <div class="box">
+          <div class="label">Montant</div>
+          <div class="big" style="font-size:24px; margin-top:6px;">250,00 €</div>
+          <div class="presets">
+            <button class="preset active">50</button>
+            <button class="preset">100</button>
+            <button class="preset">250</button>
+            <button class="preset">500</button>
+          </div>
+        </div>
+
+        <div class="box">
+          <div class="label">Mode de retrait</div>
+          <div class="withdraw-method selected" data-method="card">
+            <div class="withdraw-method-head">
+              <span>Carte bancaire</span>
+              <span class="withdraw-check"></span>
+            </div>
+            <div class="withdraw-card-mini">•••• 2847</div>
+          </div>
+
+          <div class="withdraw-method" data-method="bank">
+            <div class="withdraw-method-head">
+              <span>Virement bancaire</span>
+              <span class="withdraw-check"></span>
+            </div>
+            <div class="withdraw-card-mini">FR 76 0000...</div>
+          </div>
+
+          <button class="btn" id="continueWithdraw">Continuer</button>
+        </div>
+      </div>
+
+      <div class="withdraw-step" id="withdrawSummaryStep">
+        <div class="box">
+          <div class="label">Récapitulatif</div>
+          <div class="summary-row"><span>Montant</span><b>250,00 €</b></div>
+          <div class="summary-row"><span>Frais</span><b>0,00 €</b></div>
+          <div class="summary-row"><span>Méthode</span><b>Carte bancaire</b></div>
+          <div class="summary-row"><span>Temps estimé</span><b>24-48h</b></div>
+          <button class="btn" id="confirmWithdraw" style="margin-top:14px;">Confirmer le retrait</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="page" id="account">
+      <div class="account-welcome">
+        <small>Compte actif</small>
+        <h2>Jean Dupont</h2>
+        <p>Votre espace est sécurisé et prêt à recevoir vos revenus.</p>
+      </div>
+
+      <div class="front-grid">
+        <div class="front-info"><span>Solde</span><b>1 428,40 €</b></div>
+        <div class="front-info"><span>Gains</span><b>548 €</b></div>
+        <div class="front-info"><span>Sessions</span><b>42</b></div>
+        <div class="front-info"><span>Statut</span><b><span class="account-status">Vérifié</span></b></div>
+      </div>
+
+      <div class="front-section">
+        <h3>Informations</h3>
+        <div class="account-row"><span>Email</span><b>jean.dupont@email.com</b></div>
+        <div class="account-row"><span>Pays</span><b>France</b></div>
+        <div class="account-row"><span>Téléphone</span><b>+33 6 12 34 56 78</b></div>
+      </div>
+
+      <div class="front-section">
+        <h3>Comment ça marche</h3>
+        <div class="front-guide">
+          <div class="front-guide-number">1</div>
+          <div>
+            <b>Regardez</b>
+            <span>Suivez les contenus disponibles pour générer des gains.</span>
+          </div>
+        </div>
+        <div class="front-guide">
+          <div class="front-guide-number">2</div>
+          <div>
+            <b>Validez</b>
+            <span>Consultez votre historique et l'état de vos performances.</span>
+          </div>
+        </div>
+        <div class="front-guide">
+          <div class="front-guide-number">3</div>
+          <div>
+            <b>Retirez</b>
+            <span>Transférez votre solde vers votre carte ou votre virement.</span>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn danger-btn" id="logoutBtn">Se déconnecter</button>
+    </div>
   </div>
-</div>
 
-<div id="login">
-  <div class="card">
-    <h2>MODE EARN</h2>
-    <p class="login-description">Connectez-vous à votre espace personnel.</p>
+  <nav class="nav" aria-label="Main navigation">
+    <button class="active" data-page="home">Accueil</button>
+    <button data-page="wallet">Portefeuille</button>
+    <button data-page="withdraw">Retrait</button>
+    <button data-page="account">Compte</button>
+  </nav>
+
+  <div id="notif" aria-live="polite">
+    <img src="https://media.base44.com/images/public/6a966af9dd4ce36f10e59f6f/468a6ee17_generated_image.png" alt="notif" />
+    <span>Action confirmée</span>
   </div>
-</div>
 
-<div id="authFlow"></div>
-<div id="session"></div>
-<div id="notif"></div>
-<div id="confirm"></div>
+  <div id="confirm">
+    <div class="confirm-card">
+      <h3 style="margin-bottom:12px;">Confirmer la demande</h3>
+      <p style="color:#d9aab0; font-size:12px; line-height:1.6; margin-bottom:16px;">Voulez-vous vraiment lancer ce retrait ?</p>
+      <div style="display:grid; gap:8px;">
+        <button class="btn" id="confirmAction">Oui, confirmer</button>
+        <button class="btn-secondary" id="cancelAction">Annuler</button>
+      </div>
+    </div>
+  </div>
 
+  <script>
+    const navButtons = document.querySelectorAll('.nav button');
+    const pages = document.querySelectorAll('.page');
+    const welcome = document.getElementById('welcome');
+    const login = document.getElementById('login');
+    const authFlow = document.getElementById('authFlow');
+    const authSteps = [...document.querySelectorAll('.auth-step')];
+    const progressBars = [...document.querySelectorAll('.auth-progress span')];
+    const notif = document.getElementById('notif');
+    const confirmModal = document.getElementById('confirm');
+
+    function showPage(pageId) {
+      pages.forEach(page => page.classList.toggle('active', page.id === pageId));
+      navButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.page === pageId));
+    }
+
+    navButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        if (welcome.style.display !== 'none') return;
+        showPage(button.dataset.page);
+      });
+    });
+
+    function showNotification(message) {
+      notif.querySelector('span').textContent = message;
+      notif.classList.add('show');
+      clearTimeout(showNotification.timer);
+      showNotification.timer = setTimeout(() => notif.classList.remove('show'), 1800);
+    }
+
+    function openLogin(mode = 'login') {
+      welcome.style.display = 'none';
+      login.style.display = 'flex';
+      document.getElementById('submitLogin').dataset.mode = mode;
+    }
+
+    function backToWelcome() {
+      login.style.display = 'none';
+      authFlow.style.display = 'none';
+      welcome.style.display = 'block';
+    }
+
+    function openAuthFlow() {
+      login.style.display = 'none';
+      authFlow.style.display = 'flex';
+      let currentIndex = 0;
+      let step = authSteps[currentIndex];
+      authSteps.forEach((item, idx) => item.classList.toggle('active', idx === currentIndex));
+      progressBars.forEach((bar, idx) => bar.classList.toggle('active', idx === currentIndex));
+      return { currentIndex };
+    }
+
+    let currentStep = 0;
+
+    function renderStep(index) {
+      currentStep = index;
+      authSteps.forEach((step, idx) => step.classList.toggle('active', idx === index));
+      progressBars.forEach((bar, idx) => bar.classList.toggle('active', idx <= index));
+    }
+
+    document.querySelectorAll('[data-open-login]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        openLogin(btn.dataset.openLogin === 'create' ? 'create' : 'login');
+      });
+    });
+
+    document.getElementById('goCreate').addEventListener('click', () => {
+      openAuthFlow();
+      renderStep(0);
+    });
+
+    document.getElementById('submitLogin').addEventListener('click', () => {
+      login.style.display = 'none';
+      showPage('home');
+      showNotification('Connexion réussie');
+    });
+
+    document.querySelectorAll('[data-back-to-login]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        authFlow.style.display = 'none';
+        login.style.display = 'flex';
+      });
+    });
+
+    document.querySelectorAll('[data-next-step]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (currentStep < authSteps.length - 1) {
+          renderStep(currentStep + 1);
+        } else {
+          authFlow.style.display = 'none';
+          login.style.display = 'none';
+          welcome.style.display = 'none';
+          showPage('home');
+          showNotification('Compte créé avec succès');
+        }
+      });
+    });
+
+    document.querySelectorAll('[data-prev-step]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (currentStep > 0) renderStep(currentStep - 1);
+      });
+    });
+
+    document.getElementById('finishAuth').addEventListener('click', () => {
+      authFlow.style.display = 'none';
+      welcome.style.display = 'none';
+      showPage('home');
+      showNotification('Bienvenue dans votre espace');
+    });
+
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      welcome.style.display = 'block';
+      showPage('home');
+      login.style.display = 'none';
+      authFlow.style.display = 'none';
+      showNotification('Déconnexion réussie');
+    });
+
+    const countryData = [
+      'France', 'Belgique', 'Suisse', 'Canada', 'Allemagne', 'Espagne', 'Italie', 'Portugal',
+      'Maroc', 'Tunisie', 'Senegal', 'Côte d\'Ivoire', 'Cameroon', 'Nigeria', 'United States'
+    ];
+
+    const countryList = document.getElementById('countryList');
+    const countrySearch = document.getElementById('countrySearch');
+
+    function renderCountries(filter = '') {
+      const items = countryData.filter(c => c.toLowerCase().includes(filter.toLowerCase()));
+      countryList.innerHTML = '';
+      items.forEach(country => {
+        const div = document.createElement('div');
+        div.className = 'country-option';
+        div.textContent = country;
+        div.addEventListener('click', () => {
+          document.querySelectorAll('.country-option').forEach(el => el.classList.remove('selected'));
+          div.classList.add('selected');
+          countrySearch.value = country;
+        });
+        countryList.appendChild(div);
+      });
+    }
+
+    countrySearch.addEventListener('input', e => renderCountries(e.target.value));
+    renderCountries();
+
+    document.querySelectorAll('.preset').forEach(preset => {
+      preset.addEventListener('click', () => {
+        document.querySelectorAll('.preset').forEach(p => p.classList.remove('active'));
+        preset.classList.add('active');
+      });
+    });
+
+    document.querySelectorAll('.withdraw-method').forEach(method => {
+      method.addEventListener('click', () => {
+        document.querySelectorAll('.withdraw-method').forEach(m => m.classList.remove('selected'));
+        method.classList.add('selected');
+      });
+    });
+
+    document.getElementById('continueWithdraw').addEventListener('click', () => {
+      document.querySelector('.withdraw-step.active').classList.remove('active');
+      document.getElementById('withdrawSummaryStep').classList.add('active');
+    });
+
+    document.getElementById('confirmWithdraw').addEventListener('click', () => {
+      confirmModal.classList.add('show');
+    });
+
+    document.getElementById('confirmAction').addEventListener('click', () => {
+      confirmModal.classList.remove('show');
+      showNotification('Retrait demandé');
+      showPage('wallet');
+    });
+
+    document.getElementById('cancelAction').addEventListener('click', () => {
+      confirmModal.classList.remove('show');
+    });
+
+    document.getElementById('welcome').style.display = 'block';
+    login.style.display = 'none';
+    authFlow.style.display = 'none';
+    showPage('home');
+  </script>
 </body>
 </html>
